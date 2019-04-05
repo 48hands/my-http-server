@@ -29,6 +29,7 @@ yuichi.nagakura/my-http-server   1.0                 f6b1bcd15400        About a
 or
 
 ```
+$ sbt clean docker:stage
 $ docker build -t my-webserver ./target/docker/stage/
 $ docker images
 REPOSITORY                       TAG                 IMAGE ID            CREATED             SIZE
@@ -48,6 +49,7 @@ $ docker push yuichi.nagakura/my-http-server:1.0
 ```
 $ $(aws ecr get-login --no-include-email --password-stdin --region ap-northeast-1)
 
+$ sbt clean docker:stage
 $ docker build -t my-webserver-ecs ./target/docker/stage/
 $ docker tag my-webserver-ecs:latest XXXXXXXXXXXX.dkr.ecr.ap-northeast-1.amazonaws.com/my-webserver-ecs:latest
 $ docker push XXXXXXXXXXXX.dkr.ecr.ap-northeast-1.amazonaws.com/my-webserver-ecs:latest
