@@ -18,7 +18,7 @@ object QuickstartServer extends App with UserRoutes {
 
   val userRegistryActor: ActorRef = system.actorOf(UserRegistryActor.props, "userRegistryActor")
   lazy val routes: Route = userRoutes
-  Http().bindAndHandle(routes, "localhost", port)
+  Http().bindAndHandle(routes, "0.0.0.0", port)
 
   println(s"Server online at http://localhost:$port/")
   Await.result(system.whenTerminated, Duration.Inf)
