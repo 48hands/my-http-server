@@ -2,20 +2,30 @@
 
 ## APIs
 
-### Create User
+### AWS CloudWatchとECS連携用に作ったAPI
 
 ```
-$ curl localhost:8080/users -XPOST -H "Content-Type: application/json" -d '{"name":  "yuichikoh.nagakura", "age": 22, "countryOfResidence": "Saitama"}'
-{"description":"User yuichikoh.nagakura created."}
+# Infoログ標準出力させる
+$ curl localhost:8080/logging/info
+
+# warnログ標準出力させる
+$ curl localhost:8080/logging/warn
+
+# errorログ標準出力させる(例外出力含む)
+$ curl localhost:8080/logging/error
 ```
 
-### Get Users
+### そのほかのAPI
 
 ```
-$ curl localhost:8080/users
+# ユーザ作る
+curl localhost:8080/users -XPOST -H "Content-Type: application/json" -d '{"name":  "yuichikoh.nagakura", "age": 22, "countryOfResidence": "Saitama"}'
+
+# ユーザ一覧を参照する
+curl localhost:8080/users 
 ```
 
-## Dockernize
+## Docker系の操作
 
 ### Create Docker Image at local
 

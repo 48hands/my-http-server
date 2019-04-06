@@ -18,6 +18,7 @@ import com.example.UserRegistryActor._
 import akka.pattern.ask
 import akka.util.Timeout
 
+class MyAppException(message: String) extends Exception(message)
 
 trait UserRoutes extends JsonSupport {
   implicit def system: ActorSystem
@@ -28,7 +29,31 @@ trait UserRoutes extends JsonSupport {
 
   implicit lazy val timeout = Timeout(5.seconds)
 
-  lazy val userRoutes: Route =
+  lazy val userRoutes: Route = {
+    // 検証用に適当に入れた
+    pathPrefix("logging") {
+      val now = java.time.ZonedDateTime.now()
+      concat(
+        path("info") {
+          get {
+            log.info("意図的なInfoメッセージ")
+            complete(s"This is Info message at $now")
+          }
+        },
+        path("warn") {
+          get {
+            log.warning("意図的なWarnメッセージ")
+            complete(s"This is Warning message at $now")
+          }
+        },
+        path("error") {
+          get {
+            log.error(new MyAppException("意図的なエラー"), "意図的なエラーメッセージ")
+            complete(s"This is Error message at $now")
+          }
+        },
+      )
+    } ~
     pathPrefix("users") {
       concat(
         //#users-get-delete
@@ -72,4 +97,5 @@ trait UserRoutes extends JsonSupport {
         }
       )
     }
+  }
 }
