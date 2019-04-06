@@ -6,13 +6,13 @@
 
 ```
 # Infoログ標準出力させる
-$ curl localhost:8080/logging/info
+curl localhost:8080/logging/info
 
 # warnログ標準出力させる
-$ curl localhost:8080/logging/warn
+curl localhost:8080/logging/warn
 
 # errorログ標準出力させる(例外出力含む)
-$ curl localhost:8080/logging/error
+curl localhost:8080/logging/error
 ```
 
 ### そのほかのAPI
@@ -30,37 +30,33 @@ curl localhost:8080/users
 ### Create Docker Image at local
 
 ```
-$ sbt docker:publishLocal
-$ docker images
-REPOSITORY                       TAG                 IMAGE ID            CREATED              SIZE
-yuichi.nagakura/my-http-server   1.0                 f6b1bcd15400        About a minute ago   665MB
+sbt docker:publishLocal
 ```
 
 or
 
 ```
-$ sbt clean docker:stage
-$ docker build -t my-webserver ./target/docker/stage/
-$ docker images
-REPOSITORY                       TAG                 IMAGE ID            CREATED             SIZE
-my-webserver                     latest              f6b1bcd15400        8 minutes ago       665MB
+sbt clean docker:stage
+docker build -t my-webserver ./target/docker/stage/
 ```
 
 
 ### Push Docker Image to DockerHub
 
 ```
-$ docker login
-$ docker push yuichi.nagakura/my-http-server:1.0
+docker login
+docker push yuichi.nagakura/my-http-server:1.0
 ```
 
 ### Push Docker Image to AWS ECR
 
-```
-$ $(aws ecr get-login --no-include-email --password-stdin --region ap-northeast-1)
+事前にECRに`my-webserver-ecs`という名前でリポジトリを作っておく必要がある。
 
-$ sbt clean docker:stage
-$ docker build -t my-webserver-ecs ./target/docker/stage/
-$ docker tag my-webserver-ecs:latest XXXXXXXXXXXX.dkr.ecr.ap-northeast-1.amazonaws.com/my-webserver-ecs:latest
-$ docker push XXXXXXXXXXXX.dkr.ecr.ap-northeast-1.amazonaws.com/my-webserver-ecs:latest
+```
+sbt clean docker:stage
+docker build -t my-webserver-ecs:latest ./target/docker/stage/
+
+$(aws ecr get-login --no-include-email --region ap-northeast-1)
+docker tag my-webserver-ecs:latest XXXXXXXXXXXX.dkr.ecr.ap-northeast-1.amazonaws.com/my-webserver-ecs:latest
+docker push XXXXXXXXXXXX.dkr.ecr.ap-northeast-1.amazonaws.com/my-webserver-ecs:latest
 ```
