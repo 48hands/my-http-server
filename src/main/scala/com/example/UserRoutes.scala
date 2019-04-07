@@ -48,7 +48,7 @@ trait UserRoutes extends JsonSupport {
         },
         path("error") {
           get {
-            log.error(new MyAppException("意図的なエラー"), "意図的なエラーメッセージ")
+            log.error(new MyAppException("意図的な例外エラー").getCause, "意図的なエラーメッセージ")
             complete(s"This is Error message at $now")
           }
         },
